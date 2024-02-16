@@ -4,13 +4,14 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.form');
-const input = document.querySelector('.input');
 const gallery = document.querySelector('.gallery');
+const container = document.querySelector('div');
+const inputDate = document.querySelector('input');
 
 const showLoader = () => {
   const loader = document.createElement('span');
   loader.classList.add('loader');
-  conteiner.append(loader);
+  container.append(loader);
 };
 
 const hideLoader = () => {
@@ -24,15 +25,13 @@ form.addEventListener('submit', event => {
   showLoader();
   gallery.innerHTML = '';
   event.preventDefault();
-  const searchTerm = input.e;
+  const searchTerm = inputDate.value;
   searchImages(searchTerm);
 });
 
 function searchImages(searchTerm) {
-  const apiKey = '42290205-24e5613e72929844af62d686c';
-  const url = `https://pixabay.com/api/?key=${apiKey}&q=${encodeURIComponent(
-    searchTerm
-  )}&image_type=photo&orientation=horizontal&safesearch=true&per_page=18`;
+  const apiKey = '41764579-b97d65b31c0abd4efd9d4830e';
+  const url = `https://pixabay.com/api/?key=${apiKey}&q=${searchTerm}&image_type=photo&orientation=horizontal&safesearch=true`;
   fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -45,25 +44,21 @@ function searchImages(searchTerm) {
       if (data.hits.length === 0) {
         iziToast.error({
           message:
-            'Sorry, there are no images matching your search query. Please try again!',
+            'Sorry, there are no images matching <br>your search query. Please try again!</br>',
           position: 'center',
           transitionIn: 'fadeInLeft',
         });
         hideLoader();
       } else {
         const markup = data.hits
-          .map(image => {
+          .map(data => {
             return `
-          <li class = "gallery-item">
-          <a href = "${image.largeImageURL}">
-          <img class = "gallery-image" 
-          src = "${image.webformatURL}"
-          alt = "${image.tags}">
-          </a>
-          <p><b>Likes: </b>${image.likes}</p>
-          <p><b>Views: </b>${image.views}</p>
-          <p><b>Comments: </b>${image.comments}</p>
-          <p><b>Downloads: </b>${image.downloads}</p>
+            <li class="gallery-item"><a href="${data.largeImageURL}">
+          <img class="gallery-image" src="${data.webformatURL}" alt="${data.tags}"></a>
+          <p><b>Likes: </b>${data.likes}</p>
+          <p><b>Views: </b>${data.views}</p>
+          <p><b>Comments: </b>${data.comments}</p>
+          <p><b>Downloads: </b>${data.downloads}</p>
           </li>`;
           })
           .join('');
