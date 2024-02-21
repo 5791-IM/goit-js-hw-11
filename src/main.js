@@ -5,14 +5,15 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const form = document.querySelector('.form');
 const gallery = document.querySelector('.gallery');
-const container = document.querySelector('div');
-const inputDate = document.querySelector('input');
+const container = document.querySelector('.gallery-container');
+const searchInput = document.querySelector('input');
 
-const showLoader = () => {
+const loader = document.querySelector('.loader');
+if (!loader) {
   const loader = document.createElement('span');
   loader.classList.add('loader');
   container.append(loader);
-};
+}
 
 const hideLoader = () => {
   const loader = document.querySelector('.loader');
@@ -25,7 +26,7 @@ form.addEventListener('submit', event => {
   showLoader();
   gallery.innerHTML = '';
   event.preventDefault();
-  const searchTerm = inputDate.value;
+  const searchTerm = searchInput.value;
   searchImages(searchTerm);
 });
 
